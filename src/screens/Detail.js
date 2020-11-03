@@ -6,6 +6,8 @@ import {
   Image,
   TouchableOpacity,
 } from 'react-native';
+import {connect} from 'react-redux';
+import {savePost} from '../redux/action';
 
 const starIcon = require('../assets/image/star_icon.png');
 const backIcon = require('../assets/image/back_icon.png');
@@ -13,8 +15,7 @@ const backIcon = require('../assets/image/back_icon.png');
 import List from '../components/List';
 import ListCommentItem from '../components/ListCommentItem';
 import ListItem from '../components/ListItem';
-
-export default class Detail extends React.Component {
+class Detail extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -40,7 +41,7 @@ export default class Detail extends React.Component {
 
   onSave = () => {
     this.setState((state) => ({isSaved: !state.isSaved}));
-    this.props.route.params.callback();
+    this.props.savePost(this.props.route.params.data);
   };
 
   render() {
@@ -72,6 +73,12 @@ export default class Detail extends React.Component {
     );
   }
 }
+
+const mapDispatchToProps = {
+  savePost,
+};
+
+export default connect(null, mapDispatchToProps)(Detail);
 
 const styles = StyleSheet.create({
   container: {

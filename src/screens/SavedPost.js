@@ -6,15 +6,15 @@ import {
   TouchableOpacity,
   Image,
 } from 'react-native';
+import {connect} from 'react-redux';
 
 import List from '../components/List';
 import ListItem from '../components/ListItem';
 const backIcon = require('../assets/image/back_icon.png');
 
-export default class SavedPost extends React.Component {
+class SavedPost extends React.Component {
   goBack = () => this.props.navigation.goBack();
   render() {
-    console.log(this.props.route.data);
     return (
       <SafeAreaView style={styles.container}>
         <View style={styles.headerContainer}>
@@ -25,7 +25,7 @@ export default class SavedPost extends React.Component {
           </TouchableOpacity>
         </View>
         <List
-          data={this.props.route.params.data}
+          data={this.props.savedPosts}
           item={(props) => (
             <ListItem {...props} onPress={() => this.goToDetail(props)} />
           )}
@@ -34,6 +34,14 @@ export default class SavedPost extends React.Component {
     );
   }
 }
+
+const mapStateToProps = (state) => {
+  return {
+    savedPosts: state.savedPosts,
+  };
+};
+
+export default connect(mapStateToProps)(SavedPost);
 
 const styles = StyleSheet.create({
   container: {
