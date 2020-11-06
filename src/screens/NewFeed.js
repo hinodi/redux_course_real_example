@@ -5,24 +5,11 @@ import {connect} from 'react-redux';
 import Header from '../components/Header';
 import List from '../components/List';
 import ListItem from '../components/ListItem';
+import {getListPost} from '../redux/action';
 
 class NewFeed extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      listPosts: [],
-    };
-  }
-
   componentDidMount() {
-    fetch('https://jsonplaceholder.typicode.com/posts')
-      .then((response) => response.json())
-      .then((json) => {
-        this.setState({listPosts: json});
-      })
-      .catch((error) => {
-        console.error(error);
-      });
+    this.props.getListPost();
   }
 
   goToDetail = (item) => {
@@ -43,7 +30,7 @@ class NewFeed extends React.Component {
           onPress={this.onStarButtonPressed}
         />
         <List
-          data={this.state.listPosts}
+          data={this.props.listPosts}
           item={(props) => (
             <ListItem {...props} onPress={() => this.goToDetail(props)} />
           )}
@@ -56,10 +43,15 @@ class NewFeed extends React.Component {
 const mapStateToProps = (state) => {
   return {
     savedPosts: state.savedPosts,
+    listPosts: state.listPosts,
   };
 };
 
-export default connect(mapStateToProps)(NewFeed);
+const dispatchToProps = {
+  getListPost,
+};
+
+export default connect(mapStateToProps, dispatchToProps)(NewFeed);
 const styles = StyleSheet.create({
   container: {
     flex: 1,
