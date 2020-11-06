@@ -7,7 +7,7 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import {connect} from 'react-redux';
-import {savePost} from '../redux/action';
+import {savePost, unSavePost} from '../redux/action';
 
 const starIcon = require('../assets/image/star_icon.png');
 const backIcon = require('../assets/image/back_icon.png');
@@ -20,7 +20,9 @@ class Detail extends React.Component {
     super(props);
     this.state = {
       listComments: [],
-      isSaved: props.route.params.isSaved,
+      isSaved: props.savedPosts.some(
+        (post) => post.id === props.route.params.data.id,
+      ),
     };
   }
 
@@ -40,8 +42,12 @@ class Detail extends React.Component {
   goBack = () => this.props.navigation.goBack();
 
   onSave = () => {
+    if (this.state.isSaved) {
+      this.props.unSavePost(this.props.route.params.data);
+    } else {
+      this.props.savePost(this.props.route.params.data);
+    }
     this.setState((state) => ({isSaved: !state.isSaved}));
-    this.props.savePost(this.props.route.params.data);
   };
 
   render() {
@@ -74,11 +80,18 @@ class Detail extends React.Component {
   }
 }
 
-const mapDispatchToProps = {
-  savePost,
+const mapStateToProps = (state) => {
+  return {
+    savedPosts: state.savedPosts,
+  };
 };
 
-export default connect(null, mapDispatchToProps)(Detail);
+const mapDispatchToProps = {
+  savePost,
+  unSavePost,
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Detail);
 
 const styles = StyleSheet.create({
   container: {
