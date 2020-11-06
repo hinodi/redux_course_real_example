@@ -6,7 +6,18 @@ export const savePost = (data) => ({
   payload: data,
 });
 
+//action creator\
 export const unSavePost = (data) => ({
   type: UN_SAVE_POST,
   payload: data,
 });
+
+export const savePostAsync = (data) => (dispatch) => {
+  setTimeout(() => {
+    // dispatch({
+    //   type: SAVE_POST,
+    //   payload: data,
+    // });
+    dispatch(savePost(data));
+  }, 5000);
+};

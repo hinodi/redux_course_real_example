@@ -7,7 +7,7 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import {connect} from 'react-redux';
-import {savePost, unSavePost} from '../redux/action';
+import {savePost, savePostAsync, unSavePost} from '../redux/action';
 
 const starIcon = require('../assets/image/star_icon.png');
 const backIcon = require('../assets/image/back_icon.png');
@@ -45,6 +45,7 @@ class Detail extends React.Component {
     if (this.state.isSaved) {
       this.props.unSavePost(this.props.route.params.data);
     } else {
+      // this.props.savePostAsync(this.props.route.params.data);
       this.props.savePost(this.props.route.params.data);
     }
     this.setState((state) => ({isSaved: !state.isSaved}));
@@ -89,6 +90,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = {
   savePost,
   unSavePost,
+  savePostAsync,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Detail);
